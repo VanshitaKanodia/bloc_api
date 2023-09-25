@@ -24,16 +24,21 @@ class _PostsPageState extends State<PostsPage> {
       appBar: AppBar(
         title: Text('Posts Page'),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          postsBloc.add(PostAddEvent());
+        },
+      ),
       body: BlocConsumer<PostsBloc, PostsState>(
         bloc: postsBloc,
         listenWhen: (current, previous) => current is PostsActionState,
-        buildWhen: (current, previous) => current is !PostsActionState,
+        buildWhen: (current, previous) => current is! PostsActionState,
         listener: (context, state) {
 
         },
         builder: (context, state) {
-          switch(state.runtimeType)
-          {
+          switch (state.runtimeType) {
             case PostsFetchingLoadingState:
               return const Center(
                 child: CircularProgressIndicator(),
@@ -44,8 +49,7 @@ class _PostsPageState extends State<PostsPage> {
               return Container(
                 child: ListView.builder(
                   itemCount: successState.posts.length,
-                  itemBuilder: (context, index)
-                  {
+                  itemBuilder: (context, index) {
                     return Container(
                       color: Colors.grey.shade200,
                       padding: const EdgeInsets.all(16),

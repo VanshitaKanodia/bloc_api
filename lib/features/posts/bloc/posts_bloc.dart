@@ -13,14 +13,23 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostAddEvent>(postAddEvent);
   }
 
-  FutureOr<void> postsInitialFetchEvent(PostsInitialFetchEvent event, Emitter<PostsState> emit) async {
+  FutureOr<void> postsInitialFetchEvent(PostsInitialFetchEvent event,
+      Emitter<PostsState> emit) async {
     emit(PostsFetchingLoadingState());
     List<PostDataUiModel> posts = await PostsRepo.fetchPosts();
-
-      emit(PostFetchingSuccessfulState(posts: posts));
-      // print(response.body);
+    emit(PostFetchingSuccessfulState(posts: posts));
+    // print(response.body);
   }
 
-  FutureOr<void> postAddEvent(PostAddEvent event, Emitter<PostsState> emit) {
+  FutureOr<void> postAddEvent(PostAddEvent event,
+      Emitter<PostsState> emit) async {
+    bool success = await PostsRepo.addPost();
+    print(success);
+    if (success) {
+      emit(PostAdditionSuccessState());
+    }
+    else {
+      emit(PostAdditionErrorState());
+    }
   }
 }
