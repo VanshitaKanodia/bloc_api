@@ -15,7 +15,6 @@ class PostsFetchingErrorState extends PostsState{}
 
 class PostFetchingSuccessfulState extends PostsState{
   final List<PostDataUiModel> posts;
-
   PostFetchingSuccessfulState({required this.posts});
 }
 

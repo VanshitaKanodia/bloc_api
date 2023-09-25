@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_api/features/posts/models/post_data_ui_model.dart';
-import 'package:bloc_api/features/posts/repos/posts_page.dart';
+import 'package:bloc_api/features/posts/repos/posts_repo.dart';
 import 'package:meta/meta.dart';
 part 'posts_event.dart';
 part 'posts_state.dart';

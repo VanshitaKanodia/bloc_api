@@ -21,55 +21,51 @@ class _PostsPageState extends State<PostsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Posts Page'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          postsBloc.add(PostAddEvent());
-        },
-      ),
-      body: BlocConsumer<PostsBloc, PostsState>(
-        bloc: postsBloc,
-        listenWhen: (current, previous) => current is PostsActionState,
-        buildWhen: (current, previous) => current is! PostsActionState,
-        listener: (context, state) {
+        appBar: AppBar(
+          title: Text('Posts Page'),
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              postsBloc.add(PostAddEvent());
+            }),
+        body: BlocConsumer<PostsBloc, PostsState>(
+          bloc: postsBloc,
+          listenWhen: (previous, current) => current is PostsActionState,
+          buildWhen: (previous, current) => current is! PostsActionState,
+          listener: (context, state) {},
+          builder: (context, state) {
+            switch (state.runtimeType) {
+              case PostsFetchingLoadingState:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              case PostFetchingSuccessfulState:
+                final successState = state as PostFetchingSuccessfulState;
 
-        },
-        builder: (context, state) {
-          switch (state.runtimeType) {
-            case PostsFetchingLoadingState:
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            case PostFetchingSuccessfulState:
-              final successState = state as PostFetchingSuccessfulState;
-
-              return Container(
-                child: ListView.builder(
-                  itemCount: successState.posts.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      color: Colors.grey.shade200,
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(successState.posts[index].title),
-                          Text(successState.posts[index].body),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              );
-            default:
-              return const SizedBox();
-          }
-        },
-      ),
-    );
+                return Container(
+                  child: ListView.builder(
+                    itemCount: successState.posts.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        color: Colors.grey.shade200,
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(successState.posts[index].title),
+                            Text(successState.posts[index].body)
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              default:
+                return const SizedBox();
+            }
+          },
+        ));
   }
 }
